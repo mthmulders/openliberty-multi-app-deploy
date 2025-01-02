@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  
+  <parent>
+    <groupId>it.mulders.ol</groupId>
+    <artifactId>multi-app</artifactId>
+    <version>1</version>
+  </parent>
+
+  <artifactId>deployment</artifactId>
+  <version>1</version>
+  <packaging>ear</packaging>
+
+  <properties>
+    <postgresql.jdbc.version>42.7.4</postgresql.jdbc.version>
+  </properties>
+
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>io.openliberty</groupId>
+        <artifactId>openliberty-jakartaee10</artifactId>
+        <version>24.0.0.12</version>
+        <type>zip</type>
+      </dependency>
+      <dependency>
+        <groupId>org.postgresql</groupId>
+        <artifactId>postgresql</artifactId>
+        <version>${postgresql.jdbc.version}</version>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+
+  <dependencies>
+    <dependency>
+      <groupId>it.mulders.ol</groupId>
+      <artifactId>api</artifactId>
+      <type>war</type>
+    </dependency>
+    <dependency>
+      <groupId>it.mulders.ol</groupId>
+      <artifactId>webapp</artifactId>
+      <type>war</type>
+    </dependency>
+
+    <!-- shared deps -->
+    <dependency>
+      <groupId>it.mulders.ol</groupId>
+      <artifactId>domain</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>jakarta.enterprise</groupId>
+      <artifactId>jakarta.enterprise.cdi-api</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>jakarta.inject</groupId>
+      <artifactId>jakarta.inject-api</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>ch.qos.logback</groupId>
+      <artifactId>logback-classic</artifactId>
+    </dependency>
+
+    <!-- api deps -->
+    <dependency>
+      <groupId>jakarta.ws.rs</groupId>
+      <artifactId>jakarta.ws.rs-api</artifactId>
+      <scope>provided</scope>
+    </dependency>
+
+    <!-- webapp deps -->
+    <dependency>
+      <groupId>jakarta.el</groupId>
+      <artifactId>jakarta.el-api</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>jakarta.faces</groupId>
+      <artifactId>jakarta.faces-api</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>jakarta.servlet</groupId>
+      <artifactId>jakarta.servlet-api</artifactId>
+      <scope>provided</scope>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <finalName>multi-app</finalName>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-ear-plugin</artifactId>
+        <configuration>
+          <defaultLibBundleDir>lib/</defaultLibBundleDir>
+          <modules>
+            <webModule>
+              <groupId>it.mulders.ol</groupId>
+              <artifactId>api</artifactId>
+              <contextRoot>/api</contextRoot>
+            </webModule>
+            <webModule>
+              <groupId>it.mulders.ol</groupId>
+              <artifactId>webapp</artifactId>
+              <contextRoot>/</contextRoot>
+            </webModule>
+          </modules>
+          <skinnyModules>true</skinnyModules>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>io.openliberty.tools</groupId>
+        <artifactId>liberty-maven-plugin</artifactId>
+        <configuration>
+          <copyDependencies>
+            <dependencyGroup>
+              <dependency>
+                <groupId>org.postgresql</groupId>
+                <artifactId>postgresql</artifactId>
+              </dependency>
+              <location>jdbc</location>
+            </dependencyGroup>
+          </copyDependencies>
+          <mergeServerEnv>true</mergeServerEnv>
+          <runtimeArtifact>
+            <groupId>io.openliberty</groupId>
+            <artifactId>openliberty-jakartaee10</artifactId>
+          </runtimeArtifact>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+</project>

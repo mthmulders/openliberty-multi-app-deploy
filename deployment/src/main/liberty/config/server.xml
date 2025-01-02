@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<server description="traqqr-dev-server">
+    <featureManager>
+        <feature>appSecurity-5.0</feature>
+        <feature>beanValidation-3.0</feature>
+        <feature>cdi-4.0</feature>
+        <feature>expressionLanguage-5.0</feature>
+        <feature>faces-4.0</feature>
+        <feature>jsonb-3.0</feature>
+        <feature>persistence-3.1</feature>
+        <feature>restfulWS-3.1</feature>
+        <feature>servlet-6.0</feature>
+    </featureManager>
+
+    <variable name="jdbc.hostname" defaultValue="localhost" />
+    <variable name="jdbc.database" defaultValue="postgres" />
+    <variable name="jdbc.username" defaultValue="postgres" />
+    <variable name="jdbc.password" defaultValue="postgres" />
+
+    <library id="postgresql-jdbc">
+        <fileset dir="${server.config.dir}/jdbc/" includes="postgresql*jar" />
+    </library>
+
+    <dataSource id="example-datasource" jndiName="jdbc/example-ds" transactional="true" type="javax.sql.XADataSource">
+        <jdbcDriver libraryRef="postgresql-jdbc" />
+        <properties serverName="${jdbc.hostname}"
+                    databaseName="${jdbc.database}"
+                    portNumber="5432"
+                    user="${jdbc.username}"
+                    password="${jdbc.password}" />
+    </dataSource>
+
+    <application location="multi-app.ear" name="multi-app" />
+
+    <applicationMonitor dropinsEnabled="false" />
+    <logging isoDateFormat="true" />
+    <webContainer deferServletLoad="false" />
+    <cdi12 enableImplicitBeanArchives="false" />
+</server>
