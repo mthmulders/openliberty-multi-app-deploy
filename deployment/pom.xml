@@ -117,7 +117,7 @@
               <contextRoot>/</contextRoot>
             </webModule>
           </modules>
-          <skinnyModules>true</skinnyModules>
+          <skinnyWars>true</skinnyWars>
         </configuration>
       </plugin>
       <plugin>
@@ -133,6 +133,7 @@
               <location>jdbc</location>
             </dependencyGroup>
           </copyDependencies>
+          <looseApplication>false</looseApplication>
           <mergeServerEnv>true</mergeServerEnv>
           <runtimeArtifact>
             <groupId>io.openliberty</groupId>
